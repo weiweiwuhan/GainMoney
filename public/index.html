@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GainMoney · 沪深看盘</title>
+<link rel="stylesheet" href="style.css">
+<script src="app.js" defer></script>
+</head>
+<body>
+<header class="top"><div class="shell top-inner">
+  <a class="brand" href="#market"><span class="logo">↗</span>GainMoney</a>
+  <nav aria-label="主导航"><a href="#market">市场行情</a><a href="#research">策略研究</a></nav>
+  <div class="connection" id="connection" role="status">正在连接行情</div>
+</div></header>
+
+<main class="shell">
+  <section id="market" aria-labelledby="market-title">
+    <div class="intro">
+      <div><p class="eyebrow">MARKET OVERVIEW</p><h1 id="market-title">市场概览<span>。</span></h1></div>
+      <div class="clock"><span>北京时间</span><strong id="clock">--:--:--</strong></div>
+    </div>
+    <div class="section-head"><h2>核心指数</h2><span id="quote-status">免费在线行情 · 每 10 秒轮询</span></div>
+    <div class="indices" id="indices"></div>
+  </section>
+
+  <section id="watch" class="panel watch" aria-labelledby="watch-title">
+    <div class="section-head"><div><h2 id="watch-title">我的自选</h2><p>添加股票代码，跟踪价格和涨跌幅。</p></div>
+      <form id="search" class="search"><input name="query" aria-label="股票代码或指数名称" placeholder="股票代码，如 600519" maxlength="20" required><button type="submit">＋ 添加</button></form>
+    </div>
+    <p id="search-status" class="feedback" role="status"></p>
+    <div class="table-scroll"><table><thead><tr><th>名称 / 代码</th><th>最新价</th><th>涨跌额</th><th>涨跌幅</th><th>行情时间</th><th>操作</th></tr></thead><tbody id="watch-rows"></tbody></table></div>
+  </section>
+
+  <section id="research" aria-labelledby="research-title">
+    <div class="intro research-intro"><div><p class="eyebrow">STRATEGY LAB</p><h2 id="research-title">策略研究<span>。</span></h2></div></div>
+    <div class="research-grid">
+      <form class="panel settings" id="backtest">
+        <h3>回测设置</h3>
+        <label>回测标的<select name="code"></select></label>
+        <div class="field-grid"><label>开始日期<input type="date" name="start" required></label><label>结束日期<input type="date" name="end" required></label></div>
+        <fieldset><legend>经典策略 · 可多选</legend>
+          <label class="choice"><input type="checkbox" name="strategy" value="ma" checked><span>均线交叉<small>MA5 / MA20</small></span></label>
+          <label class="choice"><input type="checkbox" name="strategy" value="macd"><span>MACD<small>DIF / DEA 交叉</small></span></label>
+          <label class="choice"><input type="checkbox" name="strategy" value="rsi"><span>RSI 反转<small>RSI14 · 30 / 70</small></span></label>
+          <label class="choice"><input type="checkbox" name="strategy" value="boll"><span>布林带反转<small>下轨买入 · 中轨卖出</small></span></label>
+        </fieldset>
+        <details id="custom"><summary>自定义规则</summary>
+          <label class="choice"><input type="checkbox" name="strategy" value="custom"><span>纳入本次回测</span></label>
+          <label>买入条件<input name="rule" value="三连阳开始买入" maxlength="80"></label>
+          <small>支持连续 N 根阳线或阴线，例如「连续 3 根阴线后买入」。</small>
+          <label>持有交易日<input name="hold" type="number" min="1" max="250" value="5" required></label>
+        </details>
+        <label>单边费率（%）<input name="fee" type="number" min="0" max="5" step="0.01" value="0.10" required></label>
+        <button class="run" type="submit">运行回测 <span>→</span></button>
+      </form>
+      <div class="panel result">
+        <div class="section-head"><div><h3>回测结果</h3><p id="result-meta">选择标的、日期和策略后运行回测。</p></div></div>
+        <div id="test-status" class="feedback" role="status"></div>
+        <div id="result-body" hidden>
+          <div class="table-scroll"><table><thead><tr><th>策略</th><th>累计收益</th><th>最大回撤</th><th>胜率</th><th>平仓笔数</th></tr></thead><tbody id="metrics"></tbody></table></div>
+          <div class="chart-title"><h3>资金曲线</h3><div id="legend"></div></div>
+          <canvas id="equity" role="img" aria-label="各策略日终净值与买入持有基准"></canvas>
+          <details class="trades"><summary>逐笔成交</summary><div id="trade-details"></div></details>
+        </div>
+        <div id="result-empty" class="result-empty"><span>↗</span><p>运行回测后查看收益、回撤和胜率</p></div>
+        <p class="method">按日线收盘确认信号，次一交易日开盘成交。未平仓头寸按期末收盘价计入收益，胜率只统计已平仓交易。最大回撤按日终净值计算。</p>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="shell">GainMoney <span>·</span> 本地行情与策略研究</footer>
+</body>
+</html>
